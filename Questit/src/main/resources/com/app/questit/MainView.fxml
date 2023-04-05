@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="509.0" prefWidth="893.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.questit.controllers.MainController">
+   <children>
+      <StackPane layoutY="-1.0" prefHeight="509.0" prefWidth="893.0">
+         <children>
+            <AnchorPane fx:id="mainViewPane" prefHeight="515.0" prefWidth="893.0">
+               <children>
+                  <TableView fx:id="questsTableView" layoutX="103.0" layoutY="90.0" prefHeight="395.0" prefWidth="546.0">
+                    <columns>
+                      <TableColumn fx:id="askerColumn" prefWidth="98.0" text="Asker" />
+                      <TableColumn fx:id="descriptionColumn" prefWidth="281.0" text="Description" />
+                        <TableColumn fx:id="statusColumn" minWidth="0.0" prefWidth="117.0" text="Status" />
+                    </columns>
+                  </TableView>
+                  <TableView fx:id="leaderboardTableView" layoutX="679.0" layoutY="90.0" prefHeight="395.0" prefWidth="190.0">
+                    <columns>
+                      <TableColumn fx:id="usernameLbColumn" prefWidth="91.0" text="Username" />
+                      <TableColumn fx:id="questsLbColumn" prefWidth="108.0" text="Quests solved" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="318.0" layoutY="14.0" text="Available Quests">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="715.0" layoutY="14.0" text="Leaderboard">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="searchTaskTextField" layoutX="103.0" layoutY="54.0" prefHeight="25.0" prefWidth="546.0" promptText="Search a quest" />
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+      <VBox fx:id="navBar" prefHeight="487.0" prefWidth="65.0" spacing="15.0">
+         <children>
+            <ImageView fx:id="profileButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/profile.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="tasksButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/quests.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="addTaskButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/add.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="solvedButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/solved.png" />
+               </image>
+            </ImageView>
+            <Pane prefHeight="247.0" prefWidth="60.0" />
+            <ImageView fx:id="logoutButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logout.png" />
+               </image>
+            </ImageView>
+         </children>
+         <padding>
+            <Insets left="5.0" top="25.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
