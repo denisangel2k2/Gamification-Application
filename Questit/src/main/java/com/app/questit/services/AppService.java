@@ -1,30 +1,27 @@
 package com.app.questit.services;
 
 
+import com.app.questit.domain.DataTypes.QuestType;
 import com.app.questit.domain.DataTypes.TaskStatus;
-import com.app.questit.domain.Task;
-import com.app.questit.domain.TaskResponse;
+import com.app.questit.domain.Quest;
 import com.app.questit.domain.User;
-import com.app.questit.repository.Interfaces.ITaskRepository;
-import com.app.questit.repository.Interfaces.ITaskResponseRepository;
+import com.app.questit.repository.Interfaces.IQuestRepository;
 import com.app.questit.repository.Interfaces.IUserRepository;
+import com.app.questit.utils.patterns.Observable;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class AppService implements IService{
+public class AppService extends Observable implements IService  {
     private IUserRepository userRepository;
-    private ITaskResponseRepository taskResponseRepository;
-    private ITaskRepository taskRepository;
 
-    public AppService(IUserRepository userRepository, ITaskResponseRepository taskResponseRepository, ITaskRepository taskRepository) {
+    private IQuestRepository questRepository;
+
+    public AppService(IUserRepository userRepository,  IQuestRepository questRepository) {
         this.userRepository = userRepository;
-        this.taskResponseRepository = taskResponseRepository;
-        this.taskRepository = taskRepository;
+        this.questRepository = questRepository;
     }
 
     @Override
@@ -42,70 +39,70 @@ public class AppService implements IService{
         }
     }
 
+
     @Override
-    public Iterable<Task> getAvailableTasksForUser(Long userId, String description) {
-        if (description==null || description.isEmpty()) {
-            List<Task> tasks = (List<Task>) taskRepository.findAll();
-            List<Task> availableTasks;
-            availableTasks = tasks.stream()
-                    .filter(task -> task.getStatus().equals(TaskStatus.AVAILABLE) && task.getAsker_id() != userId)
-                    .collect(Collectors.toList());
+    public void addQuest() {
+        List<QuestType> questTypes=new ArrayList<>();
+        questTypes.addAll(List.of(QuestType.values()));
 
+        Random random = new Random();
+        QuestType type = questTypes.get(random.nextInt(questTypes.size()));
 
-            return availableTasks;
+        int tokens = random.nextInt(1000 - 100 + 1) + 100;
 
-        }
-        else{
-            List<Task> tasks = (List<Task>) taskRepository.findAll();
-            List<Task> availableTasks;
-            availableTasks = tasks.stream()
-                    .filter(task -> task.getStatus().equals(TaskStatus.AVAILABLE) && task.getAsker_id() != userId && task.getDescription().contains(description))
-                    .collect(Collectors.toList());
-            return availableTasks;
-        }
+        Quest quest=new Quest(type,tokens);
+        questRepository.save(quest);
+
+        notifyObservers();
 
     }
 
     @Override
-    public Iterable<Task> getSolvedTasksForUser(Long userId) {
-        List<Task> tasks=(List<Task>)taskRepository.findAll();
-        List<Task> solvedTasks;
-        solvedTasks=tasks.stream()
+    public void removeQuest() {
+        List<Quest> quests =(List<Quest>)questRepository.findAll();
+        try {
+            int i=0;
+            while (quests.get(i).getStatus().equals(TaskStatus.DONE) && i<quests.size())
+                i++;
+
+            questRepository.delete(quests.get(i).getId());
+        }
+        catch (Exception e){
+            System.out.println("No quests to delete");
+        }
+    }
+
+    @Override
+    public void updateUser(long id, String first_name, String last_name, String email, String password, String username, int tokens) {
+        User user=new User(first_name,last_name,email,password,username);
+        user.setId(id);
+        user.setTokens(tokens);
+        userRepository.update(user);
+
+        notifyObservers();
+    }
+
+    @Override
+    public Iterable<Quest> getSolvedQuestsForUser(Long userId) {
+        List<Quest> quests =(List<Quest>)questRepository.findAll();
+        List<Quest> solvedQuests;
+        solvedQuests = quests.stream()
                 .filter(task -> task.getStatus().equals(TaskStatus.DONE) && task.getResponder_id().equals(userId))
                 .collect(Collectors.toList());
-        return solvedTasks;
+        return solvedQuests;
     }
 
     @Override
-    public void completeTask(Long taskId, Long userId) {
-        Task task=taskRepository.findOne(taskId);
-        task.setStatus(TaskStatus.DONE);
-        task.setResponder_id(userId);
-        taskRepository.update(task);
+    public void completeQuest(Long taskId, Long userId) {
+        Quest quest =questRepository.findOne(taskId);
+        quest.setStatus(TaskStatus.DONE);
+        quest.setResponder_id(userId);
+        questRepository.update(quest);
+
+        notifyObservers();
     }
 
-    @Override
-    public void addTaskResponse(Long taskId, Long responderId, String description) {
-        TaskResponse taskResponse=new TaskResponse(description,taskId,responderId);
-        taskResponseRepository.save(taskResponse);
-    }
 
-    @Override
-    public void addTask(String description, Long askerId) {
-        Task task=new Task(description,askerId);
-        taskRepository.save(task);
-    }
-
-    @Override
-    public void deleteTask(Long taskId) {
-        taskRepository.delete(taskId);
-    }
-
-    @Override
-    public int getBadgeLevelForUser(Long userId) {
-        User user=userRepository.findOne(userId);
-        return user.getBadge_level();
-    }
 
     @Override
     public int getTokensForUser(Long userId) {
@@ -113,14 +110,18 @@ public class AppService implements IService{
         return user.getTokens();
     }
 
+    @Override
+    public Iterable<Quest> getAllQuests() {
+        return questRepository.findAll();
+    }
 
     @Override
     public HashMap<User, Integer> getLeaderboard() {
         List<User> users=(List<User>)userRepository.findAll();
         HashMap<User,Integer> userPoints=new HashMap<User,Integer>();
         for(User user:users){
-            List<Task> userSolvedTasks=(List<Task>)getSolvedTasksForUser(user.getId());
-            userPoints.put(user, userSolvedTasks.size());
+            List<Quest> userSolvedQuests =(List<Quest>) getSolvedQuestsForUser(user.getId());
+            userPoints.put(user, userSolvedQuests.size());
         }
         return userPoints;
     }

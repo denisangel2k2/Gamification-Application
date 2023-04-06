@@ -26,14 +26,13 @@ public class UserRepository implements IUserRepository {
     @Override
     public void save(User entity) {
         Connection connection=jdbcUtils.getConnection();
-        try(PreparedStatement preparedStatement=connection.prepareStatement("insert into users(first_name,last_name,email,password,username,badge_level,tokens) values(?,?,?,?,?,?,?)")){
+        try(PreparedStatement preparedStatement=connection.prepareStatement("insert into users(first_name,last_name,email,password,username,tokens) values(?,?,?,?,?,?)")){
             preparedStatement.setString(1,entity.getFirst_name());
             preparedStatement.setString(2,entity.getLast_name());
             preparedStatement.setString(3,entity.getEmail());
             preparedStatement.setString(4,entity.getPassword());
             preparedStatement.setString(5,entity.getUsername());
-            preparedStatement.setInt(6,entity.getBadge_level());
-            preparedStatement.setInt(7,entity.getTokens());
+            preparedStatement.setInt(6,entity.getTokens());
 
             preparedStatement.executeUpdate();
         }
@@ -58,12 +57,14 @@ public class UserRepository implements IUserRepository {
     @Override
     public void update(User entity) {
         Connection connection=jdbcUtils.getConnection();
-        try(PreparedStatement preparedStatement=connection.prepareStatement("update users set first_name=?,last_name=?,email=?,password=?,username=?")){
+        try(PreparedStatement preparedStatement=connection.prepareStatement("update users set first_name=?,last_name=?,email=?,password=?,username=?,tokens=? where id=?")){
             preparedStatement.setString(1,entity.getFirst_name());
             preparedStatement.setString(2,entity.getLast_name());
             preparedStatement.setString(3,entity.getEmail());
             preparedStatement.setString(4,entity.getPassword());
             preparedStatement.setString(5,entity.getUsername());
+            preparedStatement.setInt(6,entity.getTokens());
+            preparedStatement.setLong(7,entity.getId());
             preparedStatement.executeUpdate();
         }
         catch (SQLException ex){
@@ -85,13 +86,11 @@ public class UserRepository implements IUserRepository {
             String email=resultSet.getString("email");
             String password=resultSet.getString("password");
             String username=resultSet.getString("username");
-            int badge_level=resultSet.getInt("badge_level");
             int tokens=resultSet.getInt("tokens");
 
             User user=new User(first_name,last_name,email,password,username);
             user.setId(idd);
             user.setTokens(tokens);
-            user.setBadge_level(badge_level);
             return user;
 
         }
@@ -114,13 +113,11 @@ public class UserRepository implements IUserRepository {
                 String email=resultSet.getString("email");
                 String password=resultSet.getString("password");
                 String username=resultSet.getString("username");
-                int badge_level=resultSet.getInt("badge_level");
                 int tokens=resultSet.getInt("tokens");
 
                 User user=new User(first_name,last_name,email,password,username);
                 user.setId(id);
                 user.setTokens(tokens);
-                user.setBadge_level(badge_level);
                 userList.add(user);
             }
         }

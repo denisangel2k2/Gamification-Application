@@ -6,13 +6,9 @@ import com.app.questit.services.AppService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
 
 public class LoginController {
 
@@ -21,7 +17,7 @@ public class LoginController {
         private Button loginButton;
 
         @FXML
-        private TextField passwordTextField;
+        private PasswordField passwordTextField;
 
         @FXML
         private TextField usernameTextField;
@@ -41,7 +37,7 @@ public class LoginController {
                 User userToLogin=service.getUserByUsernameAndPassword(username, password);
                 if(userToLogin!=null){
                     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainView.fxml"));
-                    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+                    Scene scene = new Scene(fxmlLoader.load(), 893, 515);
                     scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
                     MainController controller=fxmlLoader.getController();
                     controller.setService(service, userToLogin.getId());
@@ -49,6 +45,8 @@ public class LoginController {
                     Stage currentStage=(Stage)loginButton.getScene().getWindow();
                     currentStage.setScene(scene);
                     currentStage.setOpacity(0.9);
+
+
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.ERROR,"Wrong username or password", ButtonType.OK);

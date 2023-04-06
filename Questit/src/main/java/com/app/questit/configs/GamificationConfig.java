@@ -1,8 +1,7 @@
 package com.app.questit.configs;
 
 
-import com.app.questit.repository.Implementations.TaskRepository;
-import com.app.questit.repository.Implementations.TaskResponseRepository;
+import com.app.questit.repository.Implementations.QuestRepository;
 import com.app.questit.repository.Implementations.UserRepository;
 import com.app.questit.services.AppService;
 import org.springframework.context.annotation.Bean;
@@ -28,20 +27,17 @@ public class GamificationConfig {
     }
 
     @Bean
-    TaskRepository taskRepository(){
-        return new TaskRepository(getProps());
+    QuestRepository questRepository(){
+        return new QuestRepository(getProps());
     }
     @Bean
     UserRepository userRepository(){
         return new UserRepository(getProps());
     }
-    @Bean
-    TaskResponseRepository taskResponseRepository(){
-        return new TaskResponseRepository(getProps());
-    }
+
     @Bean
     AppService appService(){
-        return new AppService(userRepository(), taskResponseRepository(), taskRepository());
+        return new AppService(userRepository(), questRepository());
     }
 
 }

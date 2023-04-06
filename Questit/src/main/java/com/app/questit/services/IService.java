@@ -1,25 +1,26 @@
 package com.app.questit.services;
 
 
-import com.app.questit.domain.Task;
+import com.app.questit.domain.Quest;
 import com.app.questit.domain.User;
 
 import java.util.HashMap;
 
 public interface IService {
-    Iterable<Task> getAvailableTasksForUser(Long userId, String description);
-    Iterable<Task> getSolvedTasksForUser(Long userId);
+    Iterable<Quest> getSolvedQuestsForUser(Long userId);
     Iterable<User> getAllUsers();
+    Iterable<Quest> getAllQuests();
     HashMap<User, Integer> getLeaderboard();
-    void completeTask(Long taskId,Long userId);
-    void addTaskResponse(Long taskId,Long responderId,String description);
-    void addTask(String description,Long askerId);
-    void deleteTask(Long taskId);
-    int getBadgeLevelForUser(Long userId);
+    void completeQuest(Long taskId, Long userId);
     int getTokensForUser(Long userId);
-    int getRankForUser(Long userId);
-
     User getUserById(Long asker_id);
     User getUserByUsernameAndPassword(String username,String password);
+    int getRankForUser(Long userId);
+    void addQuest();
+    void removeQuest();
+    void updateUser(long id, String first_name,String last_name,String email,String password,String username,int tokens);
+
+
+
 
 }

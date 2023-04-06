@@ -1,10 +1,13 @@
-
-/* Set primary and secondary colors */
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 10px;
+}
+/* Set primary and secondary colors
 .root {
     -fx-base: #bdbdbd;
     -fx-accent: #b4a871;
 }
-
+*/
 .table-view {
     -fx-background-color: -fx-base;
     -fx-border-radius: 20px;
