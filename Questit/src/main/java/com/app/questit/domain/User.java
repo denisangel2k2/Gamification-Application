@@ -18,28 +18,53 @@ public class User extends Entity<Long>{
 
 
     }
+
+    /**
+     * Set the number of tokens for a user
+     * @param tokens
+     */
     public void setTokens(int tokens){
         this.tokens=tokens;
     }
+
+    /**
+     * Get the number of tokens for a user
+     * @return int
+     */
     public int getTokens(){ return tokens; }
 
 
+    /**
+     * Get the first name of a user
+     */
     public String getFirst_name() {
         return first_name;
     }
 
+    /**
+     * Get the last name of a user
+     */
     public String getLast_name() {
         return last_name;
     }
 
+    /**
+     * Get the email of a user
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Get the password of a user
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Get the username of a user
+     */
     public String getUsername() {
         return username;
     }

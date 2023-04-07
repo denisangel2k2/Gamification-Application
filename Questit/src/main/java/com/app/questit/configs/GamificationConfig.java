@@ -5,6 +5,8 @@ import com.app.questit.domain.Validators.UserValidator;
 import com.app.questit.repository.Implementations.QuestRepository;
 import com.app.questit.repository.Implementations.UserRepository;
 import com.app.questit.services.AppService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +16,7 @@ import java.util.Properties;
 
 @Configuration
 public class GamificationConfig {
+
     @Bean(name="props")
     Properties getProps(){
         Properties properties=new Properties();

@@ -5,6 +5,8 @@ import com.app.questit.domain.DataTypes.TaskStatus;
 import com.app.questit.domain.Quest;
 import com.app.questit.repository.Interfaces.IQuestRepository;
 import com.app.questit.repository.JdbcUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,12 +16,18 @@ import java.util.Properties;
 
 public class QuestRepository implements IQuestRepository {
     private JdbcUtils jdbcUtils;
+    private static final Logger logger= LogManager.getLogger();
     public QuestRepository(Properties properties){
         jdbcUtils=new JdbcUtils(properties);
     }
 
+    /**
+     * Saves an entity
+     * @param entity Quest
+     */
     @Override
     public void save(Quest entity) {
+        logger.traceEntry();
         Connection connection=jdbcUtils.getConnection();
         try(PreparedStatement preparedStatement=connection.prepareStatement("insert into quests(status,responder_id,quest_type,tokens,description) values (?,?,?,?,?)")){
             preparedStatement.setString(1,entity.getStatus().getStringValue());
@@ -33,26 +41,42 @@ public class QuestRepository implements IQuestRepository {
             preparedStatement.setString(5,entity.getDescription());
 
             preparedStatement.executeUpdate();
+            logger.info("Inserted quest");
         }
         catch (SQLException e){
             e.printStackTrace();
+            logger.error(e);
         }
+        logger.traceExit();
     }
 
+    /**
+     * Deletes an entity
+     * @param id Long
+     */
     @Override
     public void delete(Long id) {
+        logger.traceEntry();
         Connection connection=jdbcUtils.getConnection();
         try(PreparedStatement preparedStatement=connection.prepareStatement("delete from quests where id=?")){
             preparedStatement.setLong(1,id);
             preparedStatement.executeUpdate();
+            logger.info("Deleted quest with id: "+id);
         }
         catch (SQLException e){
             e.printStackTrace();
+            logger.error(e);
         }
+        logger.traceExit();
     }
 
+    /**
+     * Updates an entity which has the given entity's id
+     * @param entity
+     */
     @Override
     public void update(Quest entity) {
+        logger.traceEntry();
         Connection connection=jdbcUtils.getConnection();
         try(PreparedStatement preparedStatement=connection.prepareStatement("update quests set status=?,responder_id=? where id=?")){
             preparedStatement.setString(1,entity.getStatus().getStringValue());
@@ -60,14 +84,23 @@ public class QuestRepository implements IQuestRepository {
             preparedStatement.setLong(3,entity.getId());
 
             preparedStatement.executeUpdate();
+            logger.info("Updated quest with id: "+entity.getId());
         }
         catch (SQLException e){
             e.printStackTrace();
+            logger.error(e);
         }
+        logger.traceExit();
     }
 
+    /**
+     * Finds an entity by id
+     * @param id Long
+     * @return Quest
+     */
     @Override
     public Quest findOne(Long id) {
+        logger.traceEntry();
         Connection connection=jdbcUtils.getConnection();
         try(PreparedStatement preparedStatement=connection.prepareStatement("select * from quests where id=?")){
             preparedStatement.setLong(1,id);
@@ -88,18 +121,27 @@ public class QuestRepository implements IQuestRepository {
             quest.setStatus(status);
             quest.setResponder_id(responder_id);
 
+            logger.info("Found quest with id: "+id);
+            logger.traceExit();
             return quest;
 
 
         }
         catch (SQLException e){
             e.printStackTrace();
+            logger.error(e);
         }
+        logger.traceExit();
         return null;
     }
 
+    /**
+     * Finds all entities
+     * @return Iterable<Quest>
+     */
     @Override
     public Iterable<Quest> findAll() {
+        logger.traceEntry();
         List<Quest> questList =new ArrayList<>();
         Connection connection=jdbcUtils.getConnection();
         try(PreparedStatement preparedStatement=connection.prepareStatement("select * from quests")){
@@ -120,11 +162,15 @@ public class QuestRepository implements IQuestRepository {
                 quest.setStatus(status);
                 quest.setResponder_id(responder_id);
                 questList.add(quest);
+
             }
+            logger.info("Found " +questList.size()+" quests!");
         }
         catch (SQLException e){
             e.printStackTrace();
+            logger.error(e);
         }
+        logger.traceExit();
         return questList;
     }
 }

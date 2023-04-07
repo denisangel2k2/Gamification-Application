@@ -96,10 +96,10 @@ public class GuessTheNumberController implements Observer{
             Stage newStage= new Stage();
             newStage.setTitle("Quest IT!");
 
-            newStage.setScene(scene);
+            currentStage.setScene(scene);
             newStage.setOpacity(0.9);
-            newStage.show();
-            currentStage.close();
+            //newStage.show();
+            //currentStage.close();
         }
         catch (Exception e){
             e.printStackTrace();

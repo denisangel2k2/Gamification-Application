@@ -288,11 +288,11 @@ public class GuessTheImageController implements Observer {
 
             Stage currentStage = (Stage) backButton.getScene().getWindow();
             Stage newStage = new Stage();
-            newStage.setTitle("Quest IT!");
-            newStage.setScene(scene);
-            newStage.setOpacity(0.9);
-            newStage.show();
-            currentStage.close();
+            currentStage.setTitle("Quest IT!");
+            currentStage.setScene(scene);
+            currentStage.setOpacity(0.9);
+            //newStage.show();
+            //currentStage.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

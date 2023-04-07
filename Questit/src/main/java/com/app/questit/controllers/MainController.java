@@ -214,9 +214,9 @@ public class MainController implements Observer {
                                                 controller.setService(service, currentQuest, loggedUserId);
                                                 Stage currentStage= (Stage) mainViewPane.getScene().getWindow();
                                                 Stage newStage= new Stage();
-                                                newStage.setScene(scene);
-                                                newStage.show();
-                                                currentStage.close();
+                                                currentStage.setScene(scene);
+                                                //newStage.show();
+                                                //currentStage.close();
                                             }
                                             else if (currentQuest.getQuestType().equals(QuestType.PICK_PICTURE)){
                                                 FXMLLoader loader = new FXMLLoader(Main.class.getResource("GuessTheImageView.fxml"));
@@ -225,9 +225,9 @@ public class MainController implements Observer {
                                                 controller.setService(service, currentQuest, loggedUserId);
                                                 Stage currentStage= (Stage) mainViewPane.getScene().getWindow();
                                                 Stage newStage= new Stage();
-                                                newStage.setScene(scene);
-                                                newStage.show();
-                                                currentStage.close();
+                                                currentStage.setScene(scene);
+                                                //newStage.show();
+                                                //currentStage.close();
                                             }
 
                                         } catch (Exception e) {
@@ -338,6 +338,7 @@ public class MainController implements Observer {
             }
         });
         allUsersTableView.getSelectionModel().selectedItemProperty().addListener(o->{
+            initLists();
             User selectedUser= allUsersTableView.getSelectionModel().getSelectedItem();
             usernameLabel.setText(selectedUser.getUsername()+"'s profile");
             firstnameLabel.setText(selectedUser.getFirst_name());
@@ -446,6 +447,7 @@ public class MainController implements Observer {
     }
     private void handleNavbarClicks(){
         profileButtonView.setOnMouseClicked(event -> {
+            initLists();
             User loggedUser= service.getUserById(loggedUserId);
             usernameLabel.setText(loggedUser.getUsername()+"'s profile");
             firstnameLabel.setText(loggedUser.getFirst_name());
@@ -461,18 +463,21 @@ public class MainController implements Observer {
 
         });
         tasksButtonView.setOnMouseClicked(event -> {
+            initLists();
             userInfoPane.setVisible(false);
             mainViewPane.setVisible(true);
             allUsersPane.setVisible(false);
             completedQuestsPane.setVisible(false);
         });
         usersButtonView.setOnMouseClicked(event -> {
+            initLists();
             userInfoPane.setVisible(false);
             mainViewPane.setVisible(false);
             allUsersPane.setVisible(true);
             completedQuestsPane.setVisible(false);
         });
         completedQuestsButtonView.setOnMouseClicked(event -> {
+            initLists();
             userInfoPane.setVisible(false);
             mainViewPane.setVisible(false);
             allUsersPane.setVisible(false);
@@ -481,6 +486,7 @@ public class MainController implements Observer {
 
         logoutButtonView.setOnMouseClicked(event ->{
             try {
+
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LoginView.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 266, 381);
                 LoginController controller=fxmlLoader.getController();

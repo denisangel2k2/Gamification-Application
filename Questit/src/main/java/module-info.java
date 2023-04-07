@@ -7,6 +7,7 @@ module com.app.questit {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires spring.context;
+    requires org.apache.logging.log4j;
 
     opens com.app.questit to javafx.fxml;
     exports com.app.questit;

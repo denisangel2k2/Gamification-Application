@@ -17,37 +17,13 @@
 
 <AnchorPane prefHeight="509.0" prefWidth="893.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.questit.controllers.MainController">
    <children>
+      <ImageView fitHeight="510.0" fitWidth="831.0" layoutX="64.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../../../../../../../Questit/src/main/resources/com/app/questit/images/bg2.png" />
+         </image>
+      </ImageView>
       <StackPane layoutY="-1.0" prefHeight="509.0" prefWidth="893.0">
          <children>
-            <AnchorPane fx:id="mainViewPane" prefHeight="515.0" prefWidth="893.0">
-               <children>
-                  <TableView fx:id="leaderboardTableView" layoutX="680.0" layoutY="61.0" prefHeight="395.0" prefWidth="190.0">
-                    <columns>
-                      <TableColumn fx:id="usernameLbColumn" prefWidth="91.0" text="Username" />
-                      <TableColumn fx:id="questsLbColumn" prefWidth="108.0" text="Quests solved" />
-                    </columns>
-                  </TableView>
-                  <Label layoutX="318.0" layoutY="14.0" text="Available Quests">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="715.0" layoutY="14.0" text="Leaderboard">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <TableView fx:id="availableQuestsTableView" layoutX="101.0" layoutY="61.0" prefHeight="395.0" prefWidth="545.0">
-                    <columns>
-                      <TableColumn fx:id="descriptionColumn" prefWidth="309.0" text="Description" />
-                      <TableColumn fx:id="statusColumn" prefWidth="65.0" text="Status" />
-                        <TableColumn fx:id="tokensColumn" prefWidth="91.0" text="Tokens" />
-                        <TableColumn fx:id="actionColumn" prefWidth="79.0" text="Action" />
-                    </columns>
-                  </TableView>
-                  <Button fx:id="refreshQuestsButton" layoutX="590.0" layoutY="462.0" mnemonicParsing="false" onAction="#findNewQuests" text="Refresh" />
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="userInfoPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                <children>
                   <Label fx:id="usernameLabel" layoutX="106.0" layoutY="29.0" text="username">
@@ -131,7 +107,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="deleteAccountButton" onAction="#onDeleteAccountButtonAction" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" text="Delete account" />
+                  <Button fx:id="deleteAccountButton" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" onAction="#onDeleteAccountButtonAction" text="Delete account" />
                   <Label fx:id="tokensUPLabel" layoutX="106.0" layoutY="138.0" text="Tokens: ">
                      <font>
                         <Font name="Consolas" size="15.0" />
@@ -174,9 +150,38 @@
                   </Label>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="mainViewPane" prefHeight="515.0" prefWidth="893.0">
+               <children>
+                  <TableView fx:id="leaderboardTableView" layoutX="680.0" layoutY="61.0" prefHeight="395.0" prefWidth="190.0">
+                    <columns>
+                      <TableColumn fx:id="usernameLbColumn" prefWidth="91.0" text="Username" />
+                      <TableColumn fx:id="questsLbColumn" prefWidth="108.0" text="Quests solved" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="318.0" layoutY="14.0" text="Available Quests" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="715.0" layoutY="14.0" text="Leaderboard" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="availableQuestsTableView" layoutX="101.0" layoutY="61.0" prefHeight="395.0" prefWidth="545.0">
+                    <columns>
+                      <TableColumn fx:id="descriptionColumn" prefWidth="309.0" text="Description" />
+                      <TableColumn fx:id="statusColumn" prefWidth="65.0" text="Status" />
+                        <TableColumn fx:id="tokensColumn" prefWidth="91.0" text="Tokens" />
+                        <TableColumn fx:id="actionColumn" prefWidth="79.0" text="Action" />
+                    </columns>
+                  </TableView>
+                  <Button fx:id="refreshQuestsButton" layoutX="590.0" layoutY="462.0" mnemonicParsing="false" onAction="#findNewQuests" text="Refresh" />
+               </children>
+            </AnchorPane>
          </children>
       </StackPane>
-      <VBox fx:id="navBar" prefHeight="509.0" prefWidth="65.0" spacing="15.0">
+      <VBox fx:id="navBar" prefHeight="509.0" prefWidth="65.0" spacing="15.0" style="-fx-background-color: #679DAA;">
          <children>
             <ImageView fx:id="profileButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
