@@ -1,6 +1,7 @@
 package com.app.questit.configs;
 
 
+import com.app.questit.domain.Validators.UserValidator;
 import com.app.questit.repository.Implementations.QuestRepository;
 import com.app.questit.repository.Implementations.UserRepository;
 import com.app.questit.services.AppService;
@@ -36,8 +37,12 @@ public class GamificationConfig {
     }
 
     @Bean
+    UserValidator userValidator(){
+        return new UserValidator();
+    }
+    @Bean
     AppService appService(){
-        return new AppService(userRepository(), questRepository());
+        return new AppService(userRepository(), questRepository(),userValidator());
     }
 
 }

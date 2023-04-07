@@ -5,8 +5,10 @@ import com.app.questit.domain.DataTypes.QuestType;
 import com.app.questit.domain.DataTypes.TaskStatus;
 import com.app.questit.domain.Quest;
 import com.app.questit.domain.User;
+import com.app.questit.domain.Validators.UserValidator;
 import com.app.questit.repository.Interfaces.IQuestRepository;
 import com.app.questit.repository.Interfaces.IUserRepository;
+import com.app.questit.utils.exceptions.RepoException;
 import com.app.questit.utils.patterns.Observable;
 
 
@@ -18,10 +20,12 @@ public class AppService extends Observable implements IService  {
     private IUserRepository userRepository;
 
     private IQuestRepository questRepository;
+    private UserValidator userValidator;
 
-    public AppService(IUserRepository userRepository,  IQuestRepository questRepository) {
+    public AppService(IUserRepository userRepository, IQuestRepository questRepository, UserValidator userValidator){
         this.userRepository = userRepository;
         this.questRepository = questRepository;
+        this.userValidator=userValidator;
     }
 
     @Override
@@ -41,7 +45,8 @@ public class AppService extends Observable implements IService  {
 
 
     @Override
-    public void addQuest() {
+    public void addQuest(){
+
         List<QuestType> questTypes=new ArrayList<>();
         questTypes.addAll(List.of(QuestType.values()));
 
@@ -52,7 +57,6 @@ public class AppService extends Observable implements IService  {
 
         Quest quest=new Quest(type,tokens);
         questRepository.save(quest);
-
         notifyObservers();
 
     }
@@ -70,6 +74,14 @@ public class AppService extends Observable implements IService  {
         catch (Exception e){
             System.out.println("No quests to delete");
         }
+    }
+
+    @Override
+    public void addUser(String first_name, String last_name, String email, String password, String username) throws RepoException {
+        User user=new User(first_name,last_name,email,password,username);
+        userRepository.save(user);
+
+        notifyObservers();
     }
 
     @Override

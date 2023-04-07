@@ -4,6 +4,7 @@ package com.app.questit.repository.Implementations;
 import com.app.questit.domain.User;
 import com.app.questit.repository.Interfaces.IUserRepository;
 import com.app.questit.repository.JdbcUtils;
+import com.app.questit.utils.exceptions.RepoException;
 
 
 import java.sql.Connection;
@@ -23,8 +24,25 @@ public class UserRepository implements IUserRepository {
         jdbcUtils = new JdbcUtils(properties);
     }
 
+    private boolean findByUsername(String username){
+        Connection connection=jdbcUtils.getConnection();
+        try(PreparedStatement preparedStatement=connection.prepareStatement("select * from users where username=?")){
+            preparedStatement.setString(1,username);
+            try(ResultSet resultSet=preparedStatement.executeQuery()){
+                if(resultSet.next())
+                    return true;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     @Override
-    public void save(User entity) {
+    public void save(User entity) throws RepoException{
+        if (findByUsername(entity.getUsername()))
+            throw new RepoException("User already exists");
+
         Connection connection=jdbcUtils.getConnection();
         try(PreparedStatement preparedStatement=connection.prepareStatement("insert into users(first_name,last_name,email,password,username,tokens) values(?,?,?,?,?,?)")){
             preparedStatement.setString(1,entity.getFirst_name());

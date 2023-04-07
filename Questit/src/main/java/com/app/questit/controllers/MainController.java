@@ -13,12 +13,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MainController implements Observer {
@@ -132,8 +136,17 @@ public class MainController implements Observer {
     @FXML
     private TableColumn<User, String> usernameLbColumn;
 
+    @FXML
+    private ImageView usersButtonView;
+
+    @FXML
+    private ImageView completedQuestsButtonView;
+
     ObservableList<Quest> availableQuestsList= FXCollections.observableArrayList();
     ObservableList<User> leaderboardList= FXCollections.observableArrayList();
+    ObservableList<Quest> completedQuestsList= FXCollections.observableArrayList();
+    ObservableList<User> allUsersList= FXCollections.observableArrayList();
+
 
     private long loggedUserId;
     private AppService service;
@@ -230,12 +243,125 @@ public class MainController implements Observer {
         tokensColumn.setCellValueFactory(new PropertyValueFactory<>("tokens"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
+    private void handleCompletedQuests(){
+        completedQuestsTableView.setItems(completedQuestsList);
+        descriptionCQColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        tokensCQColumn.setCellValueFactory(new PropertyValueFactory<>("tokens"));
+        statusCQColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        completedQuestsTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                questCQDescription.setText(newSelection.getDescription());
+            }
+        });
+    }
+    private void handleAllUsers(){
+        allUsersTableView.setItems(allUsersList);
+        usernameUPColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        tokensUPColumn.setCellValueFactory(new PropertyValueFactory<>("tokens"));
+        questsFinishedUPColumn.setCellFactory(cellFact->{
+            TableCell<User, String> cell = new TableCell<>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        User currentUser= getTableView().getItems().get(getIndex());
+                        setText(String.valueOf(((List<Quest>)service.getSolvedQuestsForUser(currentUser.getId())).size()));
+                    }
+                }
+            };
+            return cell;
+        });
+        divisionColumn.setCellFactory(cellFact->{
+            TableCell<User, String> cell = new TableCell<>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        User currentUser= getTableView().getItems().get(getIndex());
+                        ImageView highestBadge= new ImageView();
+                        highestBadge.setFitHeight(19);
+                        highestBadge.setFitWidth(19);
+                        int numberOfSolvedQuests= ((List<Quest>)service.getSolvedQuestsForUser(currentUser.getId())).size();
+                        if (numberOfSolvedQuests>=15){
+                            String path=Main.class.getResource("images/obsidian.png").toString();
+                            Image image=new Image(path);
+                            highestBadge.setImage(image);
+                            setGraphic(highestBadge);
+                        }
+                        else if (numberOfSolvedQuests>=10){
+                            String path=Main.class.getResource("images/platinum.png").toString();
+                            Image image=new Image(path);
+                            highestBadge.setImage(image);
+                            setGraphic(highestBadge);
+                        }
+                        else if (numberOfSolvedQuests>=7){
+                            String path=Main.class.getResource("images/gold.png").toString();
+                            Image image=new Image(path);
+                            highestBadge.setImage(image);
+                            setGraphic(highestBadge);
+                        }
+                        else if (numberOfSolvedQuests>=5){
+
+                            String path=Main.class.getResource("images/bronze.png").toString();
+                            Image image=new Image(path);
+                            highestBadge.setImage(image);
+                            setGraphic(highestBadge);
+                        }
+                        else setGraphic(null);
+                        setText(null);
+
+                    }
+                }
+            };
+            return cell;
+        });
+
+        searchUserTextField.textProperty().addListener(o->{
+            String text= searchUserTextField.getText();
+            if (text.equals("")){
+                allUsersTableView.setItems(allUsersList);
+            }
+            else{
+                List<User> filteredUsers= ((List<User>)service.getAllUsers()).stream()
+                        .filter(user -> user.getUsername().contains(text))
+                        .collect(Collectors.toList());
+
+                allUsersList.setAll(filteredUsers);
+            }
+        });
+
+        allUsersTableView.getSelectionModel().selectedItemProperty().addListener(o->{
+            User selectedUser= allUsersTableView.getSelectionModel().getSelectedItem();
+            usernameLabel.setText(selectedUser.getUsername()+"'s profile");
+            firstnameLabel.setText(selectedUser.getFirst_name());
+            lastnameLabel.setText(selectedUser.getLast_name());
+            emailLabel.setText(selectedUser.getEmail());
+
+            handleBadgeVisibility(selectedUser);
+
+            if (selectedUser.getId()==loggedUserId)
+                deleteAccountButton.setVisible(true);
+            else deleteAccountButton.setVisible(false);
+
+            userInfoPane.setVisible(true);
+            mainViewPane.setVisible(false);
+            allUsersPane.setVisible(false);
+            completedQuestsPane.setVisible(false);
+        });
+    }
     public void initialize(){
 
         handleAvailableQuests();
         handleLeaderboard();
+        handleCompletedQuests();
+        handleAllUsers();
         handleNavbarClicks();
-
 
     }
 
@@ -255,7 +381,9 @@ public class MainController implements Observer {
 
     }
     private void initLists(){
-        List<Quest> availableQuests= (List<Quest>) service.getAllQuests();
+        List<Quest> availableQuests= ((List<Quest>) service.getAllQuests()).stream()
+                .filter(quest -> quest.getStatus().equals(TaskStatus.AVAILABLE))
+                .collect(Collectors.toList());
 
         availableQuests.sort((o1, o2) -> {
             return o2.getTokens()-o1.getTokens();
@@ -265,8 +393,15 @@ public class MainController implements Observer {
         users.sort((o1, o2) -> {
             return ((List<Quest>)service.getSolvedQuestsForUser(o2.getId())).size()-((List<Quest>)service.getSolvedQuestsForUser(o1.getId())).size();
         });
+
+        List<Quest> completedQuests= (List<Quest>)service.getSolvedQuestsForUser(loggedUserId);
+
+        List<User> allUsers= (List<User>) service.getAllUsers();
+
         availableQuestsList.setAll(availableQuests);
         leaderboardList.setAll(users);
+        completedQuestsList.setAll(completedQuests);
+        allUsersList.setAll(allUsers);
     }
 
     private void handleBadgeVisibility(User user){
@@ -292,7 +427,7 @@ public class MainController implements Observer {
     private void handleNavbarClicks(){
         profileButtonView.setOnMouseClicked(event -> {
             User loggedUser= service.getUserById(loggedUserId);
-            usernameLabel.setText(loggedUser.getUsername());
+            usernameLabel.setText(loggedUser.getUsername()+"'s profile");
             firstnameLabel.setText(loggedUser.getFirst_name());
             lastnameLabel.setText(loggedUser.getLast_name());
             emailLabel.setText(loggedUser.getEmail());
@@ -311,7 +446,33 @@ public class MainController implements Observer {
             allUsersPane.setVisible(false);
             completedQuestsPane.setVisible(false);
         });
+        usersButtonView.setOnMouseClicked(event -> {
+            userInfoPane.setVisible(false);
+            mainViewPane.setVisible(false);
+            allUsersPane.setVisible(true);
+            completedQuestsPane.setVisible(false);
+        });
+        completedQuestsButtonView.setOnMouseClicked(event -> {
+            userInfoPane.setVisible(false);
+            mainViewPane.setVisible(false);
+            allUsersPane.setVisible(false);
+            completedQuestsPane.setVisible(true);
+        });
 
+        logoutButtonView.setOnMouseClicked(event ->{
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/views/loginView.fxml"));
+                AnchorPane root = loader.load();
+                LoginController loginController= loader.getController();
+                loginController.setService(service);
+                Stage stage = (Stage) logoutButtonView.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

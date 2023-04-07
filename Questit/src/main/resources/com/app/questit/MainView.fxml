@@ -161,7 +161,7 @@
                         <Font name="Consolas Bold" size="19.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="questCQDescription" editable="false" layoutX="593.0" layoutY="62.0" prefHeight="395.0" prefWidth="275.0" />
+                  <TextArea fx:id="questCQDescription" editable="false" layoutX="593.0" layoutY="62.0" prefHeight="395.0" prefWidth="275.0" wrapText="true" />
                   <Label layoutX="642.0" layoutY="30.0" text="Quest description">
                      <font>
                         <Font name="Consolas Bold" size="19.0" />
@@ -188,7 +188,7 @@
                   <Image url="@images/crowd.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="usersButtonView1" fitHeight="60.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="completedQuestsButtonView" fitHeight="60.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/solved.png" />
                </image>
