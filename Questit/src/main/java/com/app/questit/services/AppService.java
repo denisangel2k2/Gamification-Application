@@ -9,6 +9,7 @@ import com.app.questit.domain.Validators.UserValidator;
 import com.app.questit.repository.Interfaces.IQuestRepository;
 import com.app.questit.repository.Interfaces.IUserRepository;
 import com.app.questit.utils.exceptions.RepoException;
+import com.app.questit.utils.exceptions.ValidationException;
 import com.app.questit.utils.patterns.Observable;
 
 
@@ -77,10 +78,10 @@ public class AppService extends Observable implements IService  {
     }
 
     @Override
-    public void addUser(String first_name, String last_name, String email, String password, String username) throws RepoException {
+    public void addUser(String first_name, String last_name, String email, String password, String username) throws RepoException, ValidationException {
         User user=new User(first_name,last_name,email,password,username);
+        userValidator.validate(user);
         userRepository.save(user);
-
         notifyObservers();
     }
 
@@ -91,6 +92,12 @@ public class AppService extends Observable implements IService  {
         user.setTokens(tokens);
         userRepository.update(user);
 
+        notifyObservers();
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.delete(id);
         notifyObservers();
     }
 

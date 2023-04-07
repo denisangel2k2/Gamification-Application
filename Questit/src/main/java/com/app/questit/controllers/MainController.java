@@ -142,6 +142,9 @@ public class MainController implements Observer {
     @FXML
     private ImageView completedQuestsButtonView;
 
+    @FXML
+    private Label tokensUPLabel;
+
     ObservableList<Quest> availableQuestsList= FXCollections.observableArrayList();
     ObservableList<User> leaderboardList= FXCollections.observableArrayList();
     ObservableList<Quest> completedQuestsList= FXCollections.observableArrayList();
@@ -154,7 +157,7 @@ public class MainController implements Observer {
         this.service=service;
         this.loggedUserId=loggedUserId;
         this.service.addObserver(this);
-        initLists();
+        update();
 
 
     }
@@ -289,7 +292,7 @@ public class MainController implements Observer {
                         highestBadge.setFitWidth(19);
                         int numberOfSolvedQuests= ((List<Quest>)service.getSolvedQuestsForUser(currentUser.getId())).size();
                         if (numberOfSolvedQuests>=15){
-                            String path=Main.class.getResource("images/obsidian.png").toString();
+                            String path=Main.class.getResource("images/mythic.png").toString();
                             Image image=new Image(path);
                             highestBadge.setImage(image);
                             setGraphic(highestBadge);
@@ -321,7 +324,6 @@ public class MainController implements Observer {
             };
             return cell;
         });
-
         searchUserTextField.textProperty().addListener(o->{
             String text= searchUserTextField.getText();
             if (text.equals("")){
@@ -335,13 +337,13 @@ public class MainController implements Observer {
                 allUsersList.setAll(filteredUsers);
             }
         });
-
         allUsersTableView.getSelectionModel().selectedItemProperty().addListener(o->{
             User selectedUser= allUsersTableView.getSelectionModel().getSelectedItem();
             usernameLabel.setText(selectedUser.getUsername()+"'s profile");
             firstnameLabel.setText(selectedUser.getFirst_name());
             lastnameLabel.setText(selectedUser.getLast_name());
             emailLabel.setText(selectedUser.getEmail());
+            tokensUPLabel.setText("Tokens: "+selectedUser.getTokens());
 
             handleBadgeVisibility(selectedUser);
 
@@ -364,14 +366,11 @@ public class MainController implements Observer {
         handleNavbarClicks();
 
     }
-
-    @Override
-    public void update() {
-        initLists();
-    }
-
     @FXML
     private void findNewQuests(){
+
+        User loggedUser= service.getUserById(loggedUserId);
+        service.updateUser(loggedUser.getId(),loggedUser.getFirst_name(),loggedUser.getLast_name(),loggedUser.getEmail(),loggedUser.getPassword(),loggedUser.getUsername(),loggedUser.getTokens()-1000);
 
         for (int i=0; i<2; i++)
             service.removeQuest();
@@ -379,6 +378,7 @@ public class MainController implements Observer {
         for (int i = 0; i < 5; i++)
             service.addQuest();
 
+        update();
     }
     private void initLists(){
         List<Quest> availableQuests= ((List<Quest>) service.getAllQuests()).stream()
@@ -404,6 +404,26 @@ public class MainController implements Observer {
         allUsersList.setAll(allUsers);
     }
 
+    @FXML
+    private void onDeleteAccountButtonAction(){
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LoginView.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 266, 381);
+            LoginController controller=fxmlLoader.getController();
+            controller.setService(service);
+            Stage currentStage = (Stage) logoutButtonView.getScene().getWindow();
+            Stage newStage= new Stage();
+            newStage.setTitle("Quest IT!");
+            newStage.setScene(scene);
+            newStage.show();
+            currentStage.close();
+            service.deleteUser(loggedUserId);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void handleBadgeVisibility(User user){
         bronzeBadge.setVisible(false);
         goldBadge.setVisible(false);
@@ -431,7 +451,7 @@ public class MainController implements Observer {
             firstnameLabel.setText(loggedUser.getFirst_name());
             lastnameLabel.setText(loggedUser.getLast_name());
             emailLabel.setText(loggedUser.getEmail());
-
+            tokensUPLabel.setText("Tokens: "+loggedUser.getTokens());
             handleBadgeVisibility(loggedUser);
 
             userInfoPane.setVisible(true);
@@ -461,18 +481,29 @@ public class MainController implements Observer {
 
         logoutButtonView.setOnMouseClicked(event ->{
             try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/views/loginView.fxml"));
-                AnchorPane root = loader.load();
-                LoginController loginController= loader.getController();
-                loginController.setService(service);
-                Stage stage = (Stage) logoutButtonView.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LoginView.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 266, 381);
+                LoginController controller=fxmlLoader.getController();
+                controller.setService(service);
+                Stage currentStage = (Stage) logoutButtonView.getScene().getWindow();
+                Stage newStage= new Stage();
+                newStage.setTitle("Quest IT!");
+                newStage.setScene(scene);
+                newStage.show();
+                currentStage.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
+    @Override
+    public void update() {
+        initLists();
+        User loggedUser= service.getUserById(loggedUserId);
+        if (loggedUser.getTokens()>1000)
+            refreshQuestsButton.setVisible(true);
+        else refreshQuestsButton.setVisible(false);
+    }
 }

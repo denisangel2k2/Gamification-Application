@@ -111,8 +111,8 @@ public class LoginController {
             String lastname=lastnameRegTextField.getText();
             try{
                 service.addUser(firstname,lastname,email,password,username);
-
                 Alert alert = new Alert(Alert.AlertType.INFORMATION,"User registered successfully", ButtonType.OK);
+                alert.show();
             }
             catch (Exception e){
                 Alert alert = new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.OK);

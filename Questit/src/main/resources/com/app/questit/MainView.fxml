@@ -131,7 +131,12 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="deleteAccountButton" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" text="Delete account" />
+                  <Button fx:id="deleteAccountButton" onAction="#onDeleteAccountButtonAction" layoutX="107.0" layoutY="470.0" mnemonicParsing="false" text="Delete account" />
+                  <Label fx:id="tokensUPLabel" layoutX="106.0" layoutY="138.0" text="Tokens: ">
+                     <font>
+                        <Font name="Consolas" size="15.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="allUsersPane" prefHeight="200.0" prefWidth="200.0" visible="false">
