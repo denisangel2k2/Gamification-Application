@@ -8,36 +8,53 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="381.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.questit.controllers.LoginController">
    <children>
       <ImageView fitHeight="382.0" fitWidth="266.0" pickOnBounds="true">
          <image>
-            <Image url="@../../../../../../../../Questit/src/main/resources/com/app/questit/images/loginbg.png" />
+            <Image url="@images/loginbg.png" />
          </image></ImageView>
+      <ImageView fitHeight="174.0" fitWidth="185.0" layoutX="46.0" layoutY="-33.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/logo.png" />
+         </image>
+      </ImageView>
       <StackPane layoutX="1.0" prefHeight="381.0" prefWidth="264.0">
          <children>
-            <AnchorPane fx:id="loginPane" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="usernameTextField" layoutX="58.0" layoutY="106.0" promptText="Username" />
-                  <Button fx:id="loginButton" layoutX="101.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Login" />
-                  <PasswordField fx:id="passwordTextField" layoutX="58.0" layoutY="141.0" promptText="Password" />
-                  <Label fx:id="signUpLabel" layoutX="97.0" layoutY="208.0" style="-fx-underline: true;" text=" Sign up here" />
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="registerPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                <children>
-                  <TextField fx:id="lastnameRegTextField" layoutX="58.0" layoutY="169.0" promptText="Last name" />
-                  <TextField fx:id="passwordRegTextField" layoutX="58.0" layoutY="233.0" promptText="Password" />
-                  <TextField fx:id="emailRegTextField" layoutX="58.0" layoutY="201.0" promptText="Email" />
-                  <Button fx:id="registerButton" layoutX="102.0" layoutY="268.0" mnemonicParsing="false" onAction="#onRegisterButtonAction" text="Register" />
-                  <TextField fx:id="firstnameRegTextField" layoutX="58.0" layoutY="135.0" promptText="First name" />
-                  <TextField fx:id="usernameRegTextField" layoutX="58.0" layoutY="101.0" promptText="Username" />
-                  <Label fx:id="loginLabel" layoutX="117.0" layoutY="298.0" style="-fx-underline: true;" text="Login" />
+                  <TextField fx:id="lastnameRegTextField" layoutX="58.0" layoutY="169.0" promptText="Last name" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" />
+                  <TextField fx:id="passwordRegTextField" layoutX="58.0" layoutY="233.0" promptText="Password" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" />
+                  <TextField fx:id="emailRegTextField" layoutX="58.0" layoutY="201.0" promptText="Email" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" />
+                  <Button fx:id="registerButton" layoutX="102.0" layoutY="268.0" mnemonicParsing="false" onAction="#onRegisterButtonAction" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4); -fx-background-color: white;" text="Register">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="12.0" />
+                     </font></Button>
+                  <TextField fx:id="firstnameRegTextField" layoutX="58.0" layoutY="135.0" promptText="First name" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" />
+                  <TextField fx:id="usernameRegTextField" layoutX="58.0" layoutY="101.0" promptText="Username" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" />
+                  <Label fx:id="loginLabel" layoutX="117.0" layoutY="298.0" style="-fx-underline: true; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" text="Login" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="12.0" />
+                     </font></Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="loginPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="usernameTextField" layoutX="58.0" layoutY="106.0" promptText="Username" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);;" />
+                  <Button fx:id="loginButton" layoutX="100.0" layoutY="176.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4); -fx-background-color: white;" text="Login">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="11.0" />
+                     </font></Button>
+                  <PasswordField fx:id="passwordTextField" layoutX="58.0" layoutY="141.0" promptText="Password" style="-fx-background-radius: 15px; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" />
+                  <Label fx:id="signUpLabel" layoutX="94.0" layoutY="209.0" style="-fx-underline: true; -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3), 10, 0, 4, 4);" text=" Sign up here" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="12.0" />
+                     </font></Label>
                </children>
             </AnchorPane>
          </children>
       </StackPane>
-      <ImageView fitHeight="78.0" fitWidth="131.0" layoutX="68.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

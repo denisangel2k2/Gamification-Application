@@ -19,7 +19,7 @@
    <children>
       <ImageView fitHeight="510.0" fitWidth="831.0" layoutX="64.0" pickOnBounds="true">
          <image>
-            <Image url="@../../../../../../../../Questit/src/main/resources/com/app/questit/images/bg2.png" />
+            <Image url="@images/bg2.png" />
          </image>
       </ImageView>
       <StackPane layoutY="-1.0" prefHeight="509.0" prefWidth="893.0">
@@ -183,7 +183,7 @@
       </StackPane>
       <VBox fx:id="navBar" prefHeight="509.0" prefWidth="65.0" spacing="15.0" style="-fx-background-color: #679DAA;">
          <children>
-            <ImageView fx:id="profileButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="profileButtonView" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" style="-fx-blend-mode: color_burn;">
                <image>
                   <Image url="@images/profile.png" />
                </image>
