@@ -455,6 +455,7 @@ public class MainController implements Observer {
             emailLabel.setText(loggedUser.getEmail());
             tokensUPLabel.setText("Tokens: "+loggedUser.getTokens());
             handleBadgeVisibility(loggedUser);
+            deleteAccountButton.setVisible(true);
 
             userInfoPane.setVisible(true);
             mainViewPane.setVisible(false);

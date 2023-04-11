@@ -49,7 +49,7 @@
 }
 .text-area{
     -fx-background-color: #29292D;
-    -fx-text-fill: lightgray;
+    -fx-text-fill: black;
 }
 .table-view .cell{
     -fx-cell-size: 35;
