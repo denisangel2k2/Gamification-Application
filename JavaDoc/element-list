@@ -1,0 +1,13 @@
+module:com.app.questit
+com.app.questit
+com.app.questit.configs
+com.app.questit.controllers
+com.app.questit.domain
+com.app.questit.domain.DataTypes
+com.app.questit.domain.Validators
+com.app.questit.repository
+com.app.questit.repository.Implementations
+com.app.questit.repository.Interfaces
+com.app.questit.services
+com.app.questit.utils.exceptions
+com.app.questit.utils.patterns
