@@ -2,6 +2,10 @@
 Quest IT is a gamification application where you can finish quests, win tokens and badges and more important, have fun!
 strong text
 
+[![JavaFX Toolkit](https://img.shields.io/badge/toolkit-JavaFX-orange)](https://openjfx.io)
+[![Database](https://img.shields.io/badge/db-PostgreSQL-blue)](https://www.postgresql.org)
+[![Framework](https://img.shields.io/badge/framework-Spring-green)](https://spring.io)
+
 **Video**: *https://www.youtube.com/watch?v=B-Okd1AfgZs*
 
 # Development
